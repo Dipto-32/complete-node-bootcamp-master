@@ -30,28 +30,34 @@ const replaceTemplate = (temp, product) => {
 
 const server = http.createServer((req, res) => {
 
-    const url = req.url;
+   
+    const { query, pathname } = url.parse(req.url,true);
+
+
     //Overview Page
-    if (url === '/' || url === '/overview') {
+    if (pathname === '/' || pathname === '/overview') {
         res.writeHead(200, { 'content-type': 'text/html' });
         const cardHtml = dataObject.map(el => replaceTemplate(tempCard, el)).join('');
-        //console.log(cardHtml);
+    
        const output = tempOverview.replace(/{%PRODUCT_CARDS%}/,cardHtml);
-
-
+       
         res.end(output);
 
     }
 
     // Api
-    else if (url === '/api') {
+    else if (pathname === '/api') {
         res.writeHead(200, { 'content-type': 'application/json' });
         res.end(data);
     }
 
     //Product
-    else if (url === '/product') {
-        res.end('Product');
+    else if (pathname === '/product') {
+        res.writeHead(200, { 'content-type': 'text/html' });
+        const product = dataObject[query.id];
+        const output = replaceTemplate(tempProduct,product);
+
+        res.end(output);
     }
     else {
 
