@@ -2,7 +2,7 @@ const http = require('http');
 const fs = require('fs');
 const url = require('url');
 const replaceTemplate= require('./starter/modules/replaceTemplate');
-
+const slugify = require('slugify');
 
 
 /////////////////////////////
@@ -13,7 +13,8 @@ const tempProduct = fs.readFileSync(`${__dirname}/starter/templates/template-pro
 const data = fs.readFileSync(`${__dirname}/starter/dev-data/data.json`, 'utf-8');
 const dataObject = JSON.parse(data);
 
-
+const slugs = dataObject.map(el=> slugify(el.productName, {lower:true}));
+console.log(slugs);
 ///////////////////////////
 ////////server////////////
 
